@@ -33,7 +33,7 @@ def read_root():
 def startup_event():
     print("📦 SupabaseからRAGデータを読み込み中...")
     try:
-        load_index_and_documents()
+        rag_loader.load_index_and_documents()
         print("✅ RAGデータの読み込み完了")
     except Exception as e:
         print(f"❌ RAGデータ読み込み失敗: {e}")
