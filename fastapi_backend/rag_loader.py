@@ -20,19 +20,44 @@ index = None
 documents = None
 
 def download_file(filename: str, dest_path: str):
-    res = supabase.storage.from_(BUCKET_NAME).download(filename)
-    with open(dest_path, "wb") as f:
-        f.write(res)
+    try:
+        print(f"📥 {filename} を {dest_path} にダウンロード中...")
+        res = supabase.storage.from_(BUCKET_NAME).download(filename)
+        with open(dest_path, "wb") as f:
+            f.write(res)
+        print(f"✅ {filename} のダウンロード完了")
+    except Exception as e:
+        print(f"❌ {filename} のダウンロード失敗: {e}")
+        raise
 
 def load_index_and_documents():
     os.makedirs("./tmp", exist_ok=True)
 
-    # DL
-    download_file("index.faiss", LOCAL_INDEX_PATH)
-    download_file("doc_store.pkl", LOCAL_PKL_PATH)
+    try:
+        print("=== インデックスとドキュメントのダウンロード開始 ===")
+        download_file("index.faiss", LOCAL_INDEX_PATH)
+        download_file("doc_store.pkl", LOCAL_PKL_PATH)
+        print("=== ダウンロード完了 ===")
+    except Exception as e:
+        print(f"❌ ファイルのダウンロード中にエラー: {e}")
+        raise
 
-    # メモリ展開
     global index, documents
-    index = faiss.read_index(LOCAL_INDEX_PATH)
-    with open(LOCAL_PKL_PATH, "rb") as f:
-        documents = pickle.load(f)
+    try:
+        print("🔄 FAISSインデックスをメモリにロード中...")
+        index = faiss.read_index(LOCAL_INDEX_PATH)
+        print("✅ FAISSインデックスのロード完了")
+    except Exception as e:
+        print(f"❌ FAISSインデックスのロード失敗: {e}")
+        index = None
+        raise
+
+    try:
+        print("🔄 ドキュメント（pickle）をメモリにロード中...")
+        with open(LOCAL_PKL_PATH, "rb") as f:
+            documents = pickle.load(f)
+        print("✅ ドキュメントのロード完了")
+    except Exception as e:
+        print(f"❌ ドキュメントのロード失敗: {e}")
+        documents = None
+        raise
