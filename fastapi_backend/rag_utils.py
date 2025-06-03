@@ -42,7 +42,7 @@ def answer_with_rag(query: str,index,documents) -> str:
     prompt = f"""以下は過去の業務連絡です：
     {context_text}
     質問：{query}
-    上記質問に沿って前向きな口調で回答してください。
+    上記質問に沿って簡潔に回答してください。
     """
     try:
         completion = openai.ChatCompletion.create(
