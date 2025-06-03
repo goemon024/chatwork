@@ -38,8 +38,8 @@ def load_index_and_documents():
         download_file("index.faiss", LOCAL_INDEX_PATH)
         download_file("doc_store.pkl", LOCAL_PKL_PATH)
         
-        print(os.path.exists("./tmp/index.faiss")) 
-        print(os.path.exists("./tmp/doc_store.pkl")) 
+        print(os.path.getsize("./tmp/index.faiss")) 
+        print(os.path.getsize("./tmp/doc_store.pkl")) 
         print("=== ダウンロード完了 ===")
     except Exception as e:
         print(f"❌ ファイルのダウンロード中にエラー: {e}")
@@ -49,6 +49,7 @@ def load_index_and_documents():
     try:
         print("🔄 FAISSインデックスをメモリにロード中...")
         index = faiss.read_index(LOCAL_INDEX_PATH)
+        print(type(index))
         print("✅ FAISSインデックスのロード完了")
     except Exception as e:
         print(f"❌ FAISSインデックスのロード失敗: {e}")
@@ -59,6 +60,7 @@ def load_index_and_documents():
         print("🔄 ドキュメント（pickle）をメモリにロード中...")
         with open(LOCAL_PKL_PATH, "rb") as f:
             documents = pickle.load(f)
+        print(type(documents))
         print("✅ ドキュメントのロード完了")
     except Exception as e:
         print(f"❌ ドキュメントのロード失敗: {e}")
