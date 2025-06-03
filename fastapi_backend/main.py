@@ -32,9 +32,11 @@ def read_root():
 @app.on_event("startup")
 def startup_event():
     print("📦 SupabaseからRAGデータを読み込み中...")
-    load_index_and_documents()
-    print("✅ RAGデータの読み込み完了")
-
+    try:
+        load_index_and_documents()
+        print("✅ RAGデータの読み込み完了")
+    except Exception as e:
+        print(f"❌ RAGデータ読み込み失敗: {e}")
 
 ## chatwork webhook
 API_TOKEN_ANSWER = os.getenv("CHATWORK_API_TOKEN_ANSWER")
