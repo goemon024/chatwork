@@ -1,6 +1,6 @@
 # fastapi_backend/rag_utils.py
 
-import openai, faiss, pickle, numpy as np
+import openai, numpy as np
 from typing import List
 from dotenv import load_dotenv
 import os
@@ -8,9 +8,9 @@ import os
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-index = faiss.read_index("rag_engine/index.faiss")
-with open("rag_engine/doc_store.pkl", "rb") as f:
-    documents = pickle.load(f)
+# index = faiss.read_index("rag_engine/index.faiss")
+# with open("rag_engine/doc_store.pkl", "rb") as f:
+#     documents = pickle.load(f)
 
 
 def embed_with_openai(text:str) ->list[float]:

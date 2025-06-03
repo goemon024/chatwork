@@ -12,7 +12,6 @@ from fastapi.responses import JSONResponse
 import os
 import requests
 
-
 app = FastAPI()
 
 class AskRequest(BaseModel):
@@ -35,8 +34,6 @@ def startup_event():
     print("📦 SupabaseからRAGデータを読み込み中...")
     load_index_and_documents()
     print("✅ RAGデータの読み込み完了")
-
-
 
 
 ## chatwork webhook
