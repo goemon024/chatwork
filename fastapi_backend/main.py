@@ -4,7 +4,7 @@
 # import os
 # import requests
 
-from fastapi_backend.rag_loader import load_index_and_documents,index,documents
+import fastapi_backend.rag_loader as rag_loader
 from fastapi_backend.rag_utils import answer_with_rag
 from fastapi import FastAPI, HTTPException, Request
 from pydantic import BaseModel
@@ -62,7 +62,7 @@ async def chatwork_webhook(request: Request):
         if account_id == BOT_ACCOUNT_ID:
             return JSONResponse(content={"status": "ignored"})
 
-        answer = answer_with_rag(message,index,documents)
+        answer = answer_with_rag(message,rag_loader.index,rag_loader.documents)
         post_to_chatwork(answer)
         return JSONResponse(content={"status": "success", "answer": answer})
 
