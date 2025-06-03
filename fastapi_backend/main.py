@@ -4,8 +4,8 @@
 # import os
 # import requests
 
-from rag_loader import load_index_and_documents,index,documents
-from rag_utils import answer_with_rag
+from fastapi_backend.rag_loader import load_index_and_documents,index,documents
+from fastapi_backend.rag_utils import answer_with_rag
 from fastapi import FastAPI, HTTPException, Request
 from pydantic import BaseModel
 from fastapi.responses import JSONResponse
