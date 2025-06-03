@@ -1,8 +1,17 @@
+# from fastapi import FastAPI, HTTPException, Request
+# from pydantic import BaseModel
+# from .rag_utils import answer_with_rag
+# import os
+# import requests
+
+from rag_loader import load_index_and_documents,index,documents
+from rag_utils import answer_with_rag
 from fastapi import FastAPI, HTTPException, Request
 from pydantic import BaseModel
-from .rag_utils import answer_with_rag
+from fastapi.responses import JSONResponse
 import os
 import requests
+
 
 app = FastAPI()
 
@@ -21,6 +30,13 @@ class AskRequest(BaseModel):
 def read_root():
     return {"message": "FastAPIサーバーは動作中です"}
 
+@app.on_event("startup")
+def startup_event():
+    print("📦 SupabaseからRAGデータを読み込み中...")
+    load_index_and_documents()
+    print("✅ RAGデータの読み込み完了")
+
+
 
 
 ## chatwork webhook
@@ -31,9 +47,8 @@ BOT_ACCOUNT_ID = os.getenv("BOT_ACCOUNT_ID")
 
 @app.post("/chatwork-hook")
 async def chatwork_webhook(request: Request):
-    data = await request.json()
-
     try:
+        data = await request.json()
         # ChatworkのWebhook形式に合わせてパース（例）
         webhook_event = data.get("webhook_event")
         if not webhook_event:
@@ -43,16 +58,14 @@ async def chatwork_webhook(request: Request):
         account_id = str(webhook_event.get("account_id"))
 
         print(f"📩 質問受信: {webhook_event}")
-        print(f"📩 送信元: {account_id}")
     
         # 自分のBotの投稿は無視
         if account_id == BOT_ACCOUNT_ID:
-            return {"status": "ignored"}
+            return JSONResponse(content={"status": "ignored"})
 
-        print(f"📩 質問受信: {message}")
-        answer = answer_with_rag(message)
+        answer = answer_with_rag(message,index,documents)
         post_to_chatwork(answer)
-        return {"status": "ok"}
+        return JSONResponse(content={"status": "success", "answer": answer})
 
     except Exception as e:
         print(f"⚠️ エラー: {e}")
@@ -63,5 +76,10 @@ def post_to_chatwork(message: str):
     url = f"https://api.chatwork.com/v2/rooms/{ROOM_OUTPUT_ID}/messages"
     headers = {"X-ChatWorkToken": API_TOKEN_ANSWER}
     data = {"body": message}
-    res = requests.post(url, headers=headers, data=data)
-    res.raise_for_status()
+    
+    response = requests.post(url, headers=headers, data=data)
+    if not response.ok:
+        print(f"❌ チャットワークへの投稿に失敗しました:{response.text}")
+        response.raise_for_status()
+    else:
+        print(f"✅ チャットワークへの投稿に成功しました:{response.text}")

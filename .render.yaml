@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: fastapi-chatwork-bot
+    env: python
+    region: singapore
+    startCommand: bash start.sh
+    branch: main
+    autoDeploy: true
