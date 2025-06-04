@@ -16,14 +16,14 @@ API_URL3 = f"https://api.chatwork.com/v2/rooms/{ROOM_ID3}/messages"
 HEADERS = {"X-ChatWorkToken": API_TOKEN}
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_KEY")  # or anon key for public
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")  # or anon key for public
 STORAGE_BUCKET = "chatwork-logs"
 supabase = supabase.create_client(SUPABASE_URL, SUPABASE_KEY)
 bucket = supabase.storage.from_(STORAGE_BUCKET)
 
-SAVE_DIR1 = STORAGE_BUCKET + "/tax"
-SAVE_DIR2 = STORAGE_BUCKET + "/repair"
-SAVE_DIR3 = STORAGE_BUCKET + "/memo"
+SAVE_DIR1 = "/tax"
+SAVE_DIR2 = "/repair"
+SAVE_DIR3 = "/memo"
 
 def get_saved_message_ids(save_directory):
     """既に保存されたmessage_idの一覧を取得"""
@@ -50,8 +50,8 @@ def fetch_and_store_messages():
     
     print("📥 メッセージ取得開始...")
     for i, API_URL in enumerate(URL_LIST):
-        print(API_URL, URL_LIST[i])
-        response = requests.get(URL_LIST[i], headers=HEADERS)
+        print(API_URL)
+        response = requests.get(API_URL, headers=HEADERS)
 
         if response.status_code != 200:
             print("❌ エラー:", response.status_code, response.text)
@@ -70,7 +70,7 @@ def fetch_and_store_messages():
             # JSONデータをバイト列に変換
             json_bytes = json.dumps(msg, ensure_ascii=False, indent=2).encode("utf-8")
             # Supabase上の保存パスを指定（例: "room1/12345.json"）
-            supabase_path = f"{SUPABASE_URL}/storage/v1/object/public/{DIR_LIST[i]}/{msg_id}.json"
+            supabase_path = f"{DIR_LIST[i]}/{msg_id}.json"
             # アップロード
             res = bucket.upload(supabase_path, json_bytes)
             print(f"✅ Supabaseにアップロード: {supabase_path} → {res}")

@@ -36,9 +36,9 @@ def fetch_and_store_messages():
         print(API_URL, URL_LIST[i])
         response = requests.get(URL_LIST[i], headers=HEADERS)
 
-        if response.status_code != 200:
-            print("❌ エラー:", response.status_code, response.text)
-            continue
+        # if response.status_code != 200:
+        #     print("❌ エラー:", response.status_code, response.text)
+        #     continue
 
         messages = response.json()
         saved_ids = get_saved_message_ids(DIR_LIST[i])
