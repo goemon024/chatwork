@@ -35,11 +35,11 @@ def load_index_and_documents():
 
     try:
         print("=== インデックスとドキュメントのダウンロード開始 ===")
-        download_file("index.faiss", LOCAL_INDEX_PATH)
-        download_file("doc_store.pkl", LOCAL_PKL_PATH)
-        
-        print(os.path.getsize("./tmp/index.faiss")) 
-        print(os.path.getsize("./tmp/doc_store.pkl")) 
+        download_file("index2.faiss", LOCAL_INDEX_PATH)
+        download_file("doc_store2.pkl", LOCAL_PKL_PATH)
+
+        print(os.path.getsize("./tmp/index2.faiss")) 
+        print(os.path.getsize("./tmp/doc_store2.pkl")) 
         print("=== ダウンロード完了 ===")
     except Exception as e:
         print(f"❌ ファイルのダウンロード中にエラー: {e}")

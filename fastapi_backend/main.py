@@ -56,11 +56,14 @@ async def chatwork_webhook(request: Request):
         message = webhook_event.get("body")
         account_id = str(webhook_event.get("account_id"))
 
-        print(f"📩 質問受信: {webhook_event}")
+        print(f"📩 質問受信: {message}")
     
         # 自分のBotの投稿は無視
         if account_id == BOT_ACCOUNT_ID:
             return JSONResponse(content={"status": "ignored"})
+        
+        if message =="ＲＡＧ更新":
+            print("ＲＡＧ更新します")
 
         answer = answer_with_rag(message,rag_loader.index,rag_loader.documents)
         post_to_chatwork(answer)
