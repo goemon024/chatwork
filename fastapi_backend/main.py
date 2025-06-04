@@ -64,6 +64,7 @@ async def chatwork_webhook(request: Request):
         
         if message =="ＲＡＧ更新":
             print("ＲＡＧ更新します")
+            pass
 
         answer = answer_with_rag(message,rag_loader.index,rag_loader.documents)
         post_to_chatwork(answer)
