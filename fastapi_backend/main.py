@@ -12,6 +12,8 @@ from fastapi.responses import JSONResponse
 import os
 import requests
 
+import fastapi_backend.fetch_chatwork_messages as fetch_messages
+
 app = FastAPI()
 
 class AskRequest(BaseModel):
@@ -64,7 +66,13 @@ async def chatwork_webhook(request: Request):
         
         if message =="ＲＡＧ更新":
             print("ＲＡＧ更新します")
-            pass
+            fetch_messages.fetch_and_store_messages()
+            return
+        
+        if message =="ＲＡＧ読み込み":
+            print("ＲＡＧ読み込みます")
+            startup_event()
+            return 
 
         answer = answer_with_rag(message,rag_loader.index,rag_loader.documents)
         post_to_chatwork(answer)
