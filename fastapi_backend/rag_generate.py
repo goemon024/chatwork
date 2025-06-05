@@ -305,3 +305,4 @@ def rag_generate():
 
 
 if __name__ == "__main__":
+    rag_generate()
