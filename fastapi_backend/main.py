@@ -32,14 +32,14 @@ class AskRequest(BaseModel):
 def read_root():
     return {"message": "FastAPIサーバーは動作中です"}
 
-@app.on_event("startup")
-def startup_event():
-    print("📦 SupabaseからRAGデータを読み込み中...")
-    try:
-        rag_loader.load_index_and_documents()
-        print("✅ RAGデータの読み込み完了")
-    except Exception as e:
-        print(f"❌ RAGデータ読み込み失敗: {e}")
+# @app.on_event("startup")
+# def startup_event():
+#     print("📦 SupabaseからRAGデータを読み込み中...")
+#     try:
+#         rag_loader.load_index_and_documents()
+#         print("✅ RAGデータの読み込み完了")
+#     except Exception as e:
+#         print(f"❌ RAGデータ読み込み失敗: {e}")
 
 ## chatwork webhook
 API_TOKEN_ANSWER = os.getenv("CHATWORK_API_TOKEN_ANSWER")
@@ -75,7 +75,9 @@ async def chatwork_webhook(request: Request):
         # chatworkからのコマンド
         if message =="ＲＡＧ読み込み":
             print("ＲＡＧ読み込みます")
-            startup_event()
+            rag_loader.load_index_and_documents()
+            print("✅ RAGデータの読み込み完了")
+            # startup_event()
             return 
 
         answer = answer_with_rag(message,rag_loader.index,rag_loader.documents)
