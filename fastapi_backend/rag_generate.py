@@ -258,6 +258,12 @@ def rag_generate():
     folders = ["tax",
                "repair",
                "memo"]
+    folders = ["memo",
+               "memo/",
+               "/memo",
+               "/memo/"]
+
+    
     messages = []
     for folder in folders:
         messages.extend(load_messages(folder))
@@ -299,4 +305,3 @@ def rag_generate():
 
 
 if __name__ == "__main__":
-    rag_generate()
