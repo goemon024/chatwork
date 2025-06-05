@@ -270,7 +270,7 @@ def rag_generate():
     
     if len(messages) == 0:
         print("❌ 新規メッセージが見つかりませんでした。")
-        exit()
+        return
         
     bundles = bundle_by_tfidf(messages)
     
