@@ -3,6 +3,7 @@ import pickle
 import faiss
 from supabase import create_client, Client
 from dotenv import load_dotenv
+import gc
 
 load_dotenv()
 
@@ -39,6 +40,8 @@ def load_index_and_documents():
         return
     
     try:
+        gc.collect()
+        
         print("=== インデックスとドキュメントのダウンロード開始 ===")
         download_file("index2.faiss", LOCAL_INDEX_PATH)
         download_file("doc_store2.pkl", LOCAL_PKL_PATH)
