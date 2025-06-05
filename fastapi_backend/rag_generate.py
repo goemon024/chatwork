@@ -258,10 +258,10 @@ def rag_generate():
     folders = ["tax",
                "repair",
                "memo"]
-    folders = ["memo",
-               "memo/",
-               "/memo",
-               "/memo/"]
+    # folders = ["memo",
+    #            "memo/",
+    #            "/memo",
+    #            "/memo/"]
 
     
     messages = []

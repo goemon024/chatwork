@@ -27,7 +27,7 @@ SAVE_DIR3 = "/memo"
 
 def get_saved_message_ids(save_directory):
     """既に保存されたmessage_idの一覧を取得"""
-    url = f"{SUPABASE_URL}/storage/v1/object/public/{save_directory}"
+    url = f"{SUPABASE_URL}/storage/v1/object/list/{save_directory}"
     params = {
         "limit": 1000,
     }
