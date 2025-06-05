@@ -32,7 +32,12 @@ def download_file(filename: str, dest_path: str):
 
 def load_index_and_documents():
     os.makedirs("./tmp", exist_ok=True)
-
+    
+    global index, documents
+    if index is not None and documents is not None:
+        # lazy load
+        return
+    
     try:
         print("=== インデックスとドキュメントのダウンロード開始 ===")
         download_file("index2.faiss", LOCAL_INDEX_PATH)
@@ -45,7 +50,7 @@ def load_index_and_documents():
         print(f"❌ ファイルのダウンロード中にエラー: {e}")
         raise
 
-    global index, documents
+
     try:
         print("🔄 FAISSインデックスをメモリにロード中...")
         index = faiss.read_index(LOCAL_INDEX_PATH)
