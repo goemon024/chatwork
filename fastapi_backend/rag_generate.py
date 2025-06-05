@@ -252,8 +252,9 @@ def save_index_to_supabase(index, doc_store):
 
 
 # 🔹 実行部分
-if __name__ == "__main__":
+# if __name__ == "__main__":
     
+def rag_generate():
     folders = ["tax",
                "repair",
                "memo"]
@@ -297,3 +298,5 @@ if __name__ == "__main__":
     # print("✅ RAGデータ構築完了！件数:", len(rag_data))
 
 
+if __name__ == "__main__":
+    rag_generate()

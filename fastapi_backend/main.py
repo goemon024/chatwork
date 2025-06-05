@@ -13,6 +13,7 @@ import os
 import requests
 
 import fastapi_backend.fetch_chatwork_messages as fetch_messages
+import fastapi_backend.rag_generate as rag_generate
 
 app = FastAPI()
 
@@ -64,11 +65,14 @@ async def chatwork_webhook(request: Request):
         if account_id == BOT_ACCOUNT_ID:
             return JSONResponse(content={"status": "ignored"})
         
+        # chatworkからのコマンド
         if message =="ＲＡＧ更新":
             print("ＲＡＧ更新します")
             fetch_messages.fetch_and_store_messages()
+            rag_generate.rag_generate()
             return
         
+        # chatworkからのコマンド
         if message =="ＲＡＧ読み込み":
             print("ＲＡＧ読み込みます")
             startup_event()
