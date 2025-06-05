@@ -35,12 +35,16 @@ def load_index_and_documents():
     os.makedirs("./tmp", exist_ok=True)
     
     global index, documents
+    del index
+    del documents
+    index = None
+    documents = None
+    gc.collect()
     if index is not None and documents is not None:
         # lazy load
         return
     
     try:
-        gc.collect()
         
         print("=== インデックスとドキュメントのダウンロード開始 ===")
         download_file("index2.faiss", LOCAL_INDEX_PATH)
