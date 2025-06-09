@@ -4,11 +4,18 @@
 # import os
 # import requests
 
+print("🚀 main.py 起動開始")
 import fastapi_backend.rag_loader as rag_loader
+
+print("📂 rag_loader import 完了")
 from fastapi_backend.rag_utils import answer_with_rag
+print("📂 rag_utils import 完了")
 from fastapi import FastAPI, HTTPException, Request
+print("📂 fastapi import 完了")
 from pydantic import BaseModel
+print("📂 pydantic import 完了")
 from fastapi.responses import JSONResponse
+print("📂 fastapi.responses import 完了")
 import os
 import requests
 
