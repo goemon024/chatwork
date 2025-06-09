@@ -49,6 +49,9 @@ def load_index_and_documents():
         print("=== インデックスとドキュメントのダウンロード開始 ===")
         download_file("index2.faiss", LOCAL_INDEX_PATH)
         download_file("doc_store2.pkl", LOCAL_PKL_PATH)
+        
+        print(f"📦 index ファイルサイズ: {os.path.getsize(LOCAL_INDEX_PATH)} bytes")
+        print(f"📦 pkl ファイルサイズ: {os.path.getsize(LOCAL_PKL_PATH)} bytes")
 
         print(os.path.getsize("./tmp/index.faiss")) 
         print(os.path.getsize("./tmp/doc_store.pkl")) 

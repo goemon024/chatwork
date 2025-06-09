@@ -9,13 +9,9 @@ import fastapi_backend.rag_loader as rag_loader
 
 print("📂 rag_loader import 完了")
 from fastapi_backend.rag_utils import answer_with_rag
-print("📂 rag_utils import 完了")
 from fastapi import FastAPI, HTTPException, Request
-print("📂 fastapi import 完了")
 from pydantic import BaseModel
-print("📂 pydantic import 完了")
 from fastapi.responses import JSONResponse
-print("📂 fastapi.responses import 完了")
 import os
 import requests
 
@@ -52,7 +48,6 @@ def startup_event():
 API_TOKEN_ANSWER = os.getenv("CHATWORK_API_TOKEN_ANSWER")
 ROOM_OUTPUT_ID = os.getenv("CHATWORK_ROOM_OUTPUT_ID")
 BOT_ACCOUNT_ID = os.getenv("BOT_ACCOUNT_ID")
-
 
 @app.post("/chatwork-hook")
 async def chatwork_webhook(request: Request):
