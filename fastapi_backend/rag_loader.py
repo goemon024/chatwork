@@ -63,12 +63,12 @@ def load_index_and_documents():
 
     try:
         print("🔄 FAISSインデックスをメモリにロード中...")
-        # index = faiss.read_index(LOCAL_INDEX_PATH)
-        # print(type(index))
+        index = faiss.read_index(LOCAL_INDEX_PATH)
+        print(type(index))
         print("✅ FAISSインデックスのロード完了")
     except Exception as e:
-        # print(f"❌ FAISSインデックスのロード失敗: {e}")
-        # index = None
+        print(f"❌ FAISSインデックスのロード失敗: {e}")
+        index = None
         raise
 
     try:
