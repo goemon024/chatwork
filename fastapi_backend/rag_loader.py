@@ -63,21 +63,21 @@ def load_index_and_documents():
 
     try:
         print("🔄 FAISSインデックスをメモリにロード中...")
-        index = faiss.read_index(LOCAL_INDEX_PATH)
-        print(type(index))
+        # index = faiss.read_index(LOCAL_INDEX_PATH)
+        # print(type(index))
         print("✅ FAISSインデックスのロード完了")
     except Exception as e:
-        print(f"❌ FAISSインデックスのロード失敗: {e}")
-        index = None
+        # print(f"❌ FAISSインデックスのロード失敗: {e}")
+        # index = None
         raise
 
     try:
         print("🔄 ドキュメント（pickle）をメモリにロード中...")
-        with open(LOCAL_PKL_PATH, "rb") as f:
-            documents = pickle.load(f)
-        print(type(documents))
+        # with open(LOCAL_PKL_PATH, "rb") as f:
+        #     documents = pickle.load(f)
+        # print(type(documents))
         print("✅ ドキュメントのロード完了")
     except Exception as e:
         print(f"❌ ドキュメントのロード失敗: {e}")
-        documents = None
+        # documents = None
         raise
