@@ -62,7 +62,7 @@ def extract_room_name(text):
 # 🔹 ステップ1：メッセージ読み込み（想定フォルダ：./chatwork_logs）
 def load_messages(folder_path):
     messages = []
-    today = date.today()
+    # today = date.today()
     res = bucket_log.list(folder_path)
     for file_info in res:
         file_name = file_info["name"]
@@ -74,8 +74,8 @@ def load_messages(folder_path):
         msg = json.loads(file_bytes.decode("utf-8"))
         body = msg["body"]
         send_time = datetime.fromtimestamp(msg["send_time"])
-        if send_time.date() != today:
-            continue  # 今日送信されたメッセージでなければスキップ
+        # if send_time.date() != today:
+        #     continue  # 今日送信されたメッセージでなければスキップ
         if not contains_japanese(body):
             continue  # 日本語が含まれていなければスキップ
         if is_skip_phrase(body):
@@ -83,7 +83,8 @@ def load_messages(folder_path):
         messages.append({
             "id": msg["message_id"],
             "body": body,
-            "timestamp": send_time
+            "timestamp": send_time,
+            "path": folder_path
         })
     return messages
 
@@ -96,7 +97,7 @@ def is_valid_tag(tag, min_len=2, max_len=15):
     return min_len <= len(tag) <= max_len
 
 # ステップ2：バンドル処理（TFIDFタグ添付）
-def bundle_by_tfidf(messages, top_k=3, threshold=2, mode="default"):
+def bundle_by_tfidf(messages, top_k=3, threshold=2):
     texts = [msg["body"] for msg in messages]
     
     vectorizer = TfidfVectorizer(tokenizer=tokenize_japanese,
@@ -119,9 +120,10 @@ def bundle_by_tfidf(messages, top_k=3, threshold=2, mode="default"):
         filtered_tags = [tag for tag in all_tags if is_valid_tag(tag)]
         msg["tags"] = filtered_tags
         
-        if mode == "memo":
+        if msg.path == "memo":
             room_tags = ["memo"]
-
+        if msg.path == "tax":
+            room_tags = ["tax"]
         if room_tags:
             # 部屋名タグがある場合は新しいバンドル
             bundle = {
@@ -133,12 +135,25 @@ def bundle_by_tfidf(messages, top_k=3, threshold=2, mode="default"):
             bundles.append(bundle)
             last_bundle = bundle
         else:
-            # 部屋名タグがない場合は直前のバンドルに追加
+            # 直前のバンドルが存在し、かつ日付が異なる場合は新規バンドル
             if last_bundle is not None:
-                last_bundle["id"].append(msg["id"])
-                last_bundle["messages"].append(msg)
-                last_bundle["tags"] = list(set(last_bundle["tags"] + filtered_tags))
-                last_bundle["timestamp"].append(msg["timestamp"])
+                last_date = last_bundle["timestamp"][-1].date()
+                current_date = msg["timestamp"].date()
+                if last_date != current_date:
+                    bundle = {
+                        "id": [msg["id"]],
+                        "tags": filtered_tags,
+                        "messages": [msg],
+                        "timestamp": [msg["timestamp"]]
+                    }
+                    bundles.append(bundle)
+                    last_bundle = bundle
+                else:
+                    # 同じ日付なら既存バンドルに追加
+                    last_bundle["id"].append(msg["id"])
+                    last_bundle["messages"].append(msg)
+                    last_bundle["tags"] = list(set(last_bundle["tags"] + filtered_tags))
+                    last_bundle["timestamp"].append(msg["timestamp"])
             else:
                 # 最初のメッセージが部屋名タグなしの場合は新規バンドル
                 bundle = {
@@ -258,7 +273,7 @@ def save_index_to_supabase(index, doc_store):
 # 🔹 実行部分
 # if __name__ == "__main__":
     
-def rag_generate():
+def rag_file_generate():
     folders = ["tax",
                "repair",
                "memo"]
@@ -295,12 +310,6 @@ def rag_generate():
         print(embedded_rag_data[i]["metadata"]["id"])
         print("--------------------------------")
 
-    # # 結果を保存
-    # with open("rag_documents.json", "w", encoding="utf-8") as f:
-    #     json.dump(rag_data, f, ensure_ascii=False, indent=2)
-
-    # print("✅ RAGデータ構築完了！件数:", len(rag_data))
-
 
 if __name__ == "__main__":
-    rag_generate()
+    rag_file_generate()
