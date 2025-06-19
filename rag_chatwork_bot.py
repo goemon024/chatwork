@@ -55,7 +55,7 @@ def main():
 
             time.sleep(10)
         except Exception as e:
-            print(f"⚠️ エラー発生: {e}")
+            print(f"⚠️ エラー発生    : {e}")
             time.sleep(15)
 
 if __name__ == "__main__":

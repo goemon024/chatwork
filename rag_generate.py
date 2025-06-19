@@ -231,7 +231,6 @@ if __name__ == "__main__":
         
     bundles = bundle_by_tfidf(messages)
     
-
     rag_data = []
     for bundle in bundles:
         summary = generate_summary(bundle["combined_body"])
