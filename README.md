@@ -4,9 +4,9 @@
 - fetch_chatwork_messages.py及びrag_generate.pyにてメッセージをローカルに保存してragファイルをローカルに構築する。
 
 ### localのfastapi
-''' uvicorn fastapi_backend.main:app --reload '''  
+`uvicorn fastapi_backend.main:app --reload`
 によりfastAPIをローカルで公開。  
-''' ngrok http 8000 '''  
+`ngrok http 8000`  
 にて、インターネットに公開。こちらのコマンドは適当なターミナル・カレントフォルダで可。  
 また、chatworkの設定は毎回変更する必要がある（ngrokのコマンドで表示されたForwarding）  
 
